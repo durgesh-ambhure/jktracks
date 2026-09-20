@@ -1,11 +1,27 @@
 const multer = require('multer');
 const path = require('path');
+const os = require('os');
 const fs = require('fs');
 
-const uploadDir = path.join(__dirname, '..', '..', 'uploads');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+function resolveUploadDir() {
+  const preferred = path.join(__dirname, '..', '..', 'uploads');
+  try {
+    if (!fs.existsSync(preferred)) {
+      fs.mkdirSync(preferred, { recursive: true });
+    }
+    return preferred;
+  } catch {
+    // Serverless platforms (e.g. Vercel) have a read-only filesystem
+    // except for os.tmpdir(); fall back to that instead of crashing.
+    const fallback = path.join(os.tmpdir(), 'uploads');
+    if (!fs.existsSync(fallback)) {
+      fs.mkdirSync(fallback, { recursive: true });
+    }
+    return fallback;
+  }
 }
+
+const uploadDir = resolveUploadDir();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadDir),
