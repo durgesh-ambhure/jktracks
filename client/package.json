@@ -13,7 +13,6 @@
     "@hookform/resolvers": "^3.9.0",
     "@reduxjs/toolkit": "^2.2.7",
     "axios": "^1.7.7",
-    "courier-management-system": "file:..",
     "joi": "^17.13.3",
     "lucide-react": "^0.441.0",
     "react": "^18.3.1",
