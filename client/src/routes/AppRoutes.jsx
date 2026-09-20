@@ -80,9 +80,6 @@ import GroupRightsPage from '../pages/users/GroupRightsPage';
 import UserRightsPage from '../pages/users/UserRightsPage';
 import ChangePasswordPage from '../pages/users/ChangePasswordPage';
 
-import CompanyProfilePage from '../pages/settings/CompanyProfilePage';
-import CompanyLedgerPage from '../pages/settings/CompanyLedgerPage';
-import PlanPage from '../pages/settings/PlanPage';
 import UserProfilePage from '../pages/settings/UserProfilePage';
 import GridPageSizePage from '../pages/settings/GridPageSizePage';
 import MailSmsFormatPage from '../pages/settings/MailSmsFormatPage';
@@ -221,9 +218,6 @@ export default function AppRoutes() {
         <Route path="/change-password" element={<Protected><ChangePasswordPage /></Protected>} />
 
         {/* Settings */}
-        <Route path="/settings/company-profile" element={<Protected permission="settings.update"><CompanyProfilePage /></Protected>} />
-        <Route path="/settings/company-ledger" element={<Protected permission="settings.read"><CompanyLedgerPage /></Protected>} />
-        <Route path="/settings/plan" element={<Protected permission="settings.read"><PlanPage /></Protected>} />
         <Route path="/settings/profile" element={<Protected><UserProfilePage /></Protected>} />
         <Route path="/settings/table-page-size" element={<Protected permission="settings.update"><GridPageSizePage /></Protected>} />
         <Route path="/settings/mail-sms-format" element={<Protected permission="settings.update"><MailSmsFormatPage /></Protected>} />

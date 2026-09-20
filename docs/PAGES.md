@@ -145,13 +145,14 @@ this list without updating this file first.
 
 ## Settings
 ```
-/settings/company-profile         (Company Profile / CompanyMaster)
-/settings/company-ledger
-/settings/plan                    (Your Plan)
 /settings/profile                 (Your Profile)
 /settings/table-page-size         (Grid Page Size)
 /settings/mail-sms-format
 ```
+Note: this deployment is a single dedicated client's internal shipment-documentation tool
+(not a multi-tenant/reseller SaaS instance), so Company Profile, Company Ledger and Your Plan
+— all of which existed in the reference product to manage a franchise/reseller's own business
+details and its billing relationship with the SaaS provider — do not apply and were removed.
 
 ## Status legend used across docs
 - **Full**: implemented with real CRUD + validation + backend persistence.

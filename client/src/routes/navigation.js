@@ -31,7 +31,6 @@ import {
   Settings,
   Building,
   BookOpenText,
-  Sparkles,
   UserCircle,
   Rows3,
   MailPlus,
@@ -135,9 +134,6 @@ const navigation = [
     title: 'Settings',
     icon: Settings,
     children: [
-      { title: 'Company Profile', icon: Building, path: '/settings/company-profile', permission: 'settings.update' },
-      { title: 'Company Ledger', icon: BookOpenText, path: '/settings/company-ledger', permission: 'settings.read' },
-      { title: 'Your Plan', icon: Sparkles, path: '/settings/plan', permission: 'settings.read' },
       { title: 'Your Profile', icon: UserCircle, path: '/settings/profile' },
       { title: 'Grid Page Size', icon: Rows3, path: '/settings/table-page-size', permission: 'settings.update' },
       { title: 'Mail/SMS Format', icon: MailPlus, path: '/settings/mail-sms-format', permission: 'settings.update' },

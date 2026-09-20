@@ -70,9 +70,6 @@ Maps each page in PAGES.md to a route element, guard, and permission key.
 | /group-rights | GroupRightsPage | Auth | users.update |
 | /user-rights | UserRightsPage | Auth | users.update |
 | /change-password | ChangePasswordPage | Auth | - |
-| /settings/company-profile | CompanyProfilePage | Auth | settings.update |
-| /settings/company-ledger | CompanyLedgerPage | Auth | settings.read |
-| /settings/plan | PlanPage | Auth | settings.read |
 | /settings/profile | UserProfilePage | Auth | - |
 | /settings/table-page-size | GridPageSizePage | Auth | settings.update |
 | /settings/mail-sms-format | MailSmsFormatPage | Auth | settings.update |

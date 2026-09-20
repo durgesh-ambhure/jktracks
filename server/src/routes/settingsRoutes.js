@@ -4,8 +4,11 @@ const { authenticate, requirePermission } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Tier 2 shortcut — sub-keys: company-profile | plan | payment-history |
-// profile | table-page-size | mail-sms-format. See genericController.js.
+// Tier 2 shortcut — sub-keys: profile | table-page-size | mail-sms-format.
+// (company-profile/company-ledger/plan removed: this deployment is a single
+// dedicated client's internal tool, not a multi-tenant/reseller SaaS
+// instance, so franchise/subscription-billing settings don't apply.)
+// See genericController.js.
 const controller = makeGenericController((req) => `settings:${req.params.key}`, 'Settings');
 
 router.use(authenticate);
