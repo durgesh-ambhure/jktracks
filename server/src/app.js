@@ -22,6 +22,10 @@ app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 app.use(cookieParser());
 
+app.get('/', (req, res) => {
+  res.status(200).json({ success: true, message: 'JK Tracks API server is running successfully' });
+});
+
 app.get('/health', (req, res) => {
   res.status(200).json({ success: true, message: 'OK', data: { uptime: process.uptime() } });
 });

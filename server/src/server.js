@@ -6,7 +6,7 @@ async function start() {
   await connectDB();
   app.listen(env.PORT, () => {
     // eslint-disable-next-line no-console
-    console.log(`[server] listening on port ${env.PORT} (${env.NODE_ENV})`);
+    console.log(`Server is running on http://localhost:${env.PORT} (${env.NODE_ENV})`);
   });
 }
 

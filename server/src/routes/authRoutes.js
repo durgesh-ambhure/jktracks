@@ -17,8 +17,6 @@ const authLimiter = rateLimit({
 });
 
 router.use(authLimiter);
-console.log("yesssss");
-
 
 router.post('/login', validate(authValidators.login), authController.login);
 router.post('/logout', authenticate, authController.logout);
