@@ -110,7 +110,7 @@ export default function AppRoutes() {
           </Protected>
         }
       >
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/dashboard" element={<Protected permission="dashboard.read"><DashboardPage /></Protected>} />
 
         {/* Shipments */}
