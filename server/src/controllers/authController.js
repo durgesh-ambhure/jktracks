@@ -13,7 +13,11 @@ const REFRESH_COOKIE_NAME = 'refreshToken';
 const REFRESH_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: env.NODE_ENV === 'production',
-  sameSite: 'lax',
+  // Client and server are deployed on different *.vercel.app sites, so the
+  // cookie must be SameSite=None (requires Secure) to survive cross-site
+  // fetch/XHR requests in production. Locally client/server share the
+  // "localhost" site, where Lax already works and Secure would require HTTPS.
+  sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
   maxAge: 7 * 24 * 60 * 60 * 1000
 };
 
