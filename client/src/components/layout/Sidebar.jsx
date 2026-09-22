@@ -1,12 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
-import { ChevronRight, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { ChevronRight, X } from 'lucide-react';
 import navigation from '../../routes/navigation';
 import {
-  selectSidebarCollapsed,
   selectSidebarMobileOpen,
   selectExpandedGroups,
-  toggleSidebarCollapsed,
   toggleGroupExpanded,
   setSidebarMobileOpen,
 } from '../../store/uiSlice';
@@ -18,7 +16,7 @@ function isGroupActive(item, pathname) {
   return false;
 }
 
-function NavGroup({ item, collapsed, pathname, hasPermission, closeMobile }) {
+function NavGroup({ item, pathname, hasPermission, closeMobile }) {
   const dispatch = useDispatch();
   const expandedGroups = useSelector(selectExpandedGroups);
   const visibleChildren = (item.children || []).filter(
@@ -35,7 +33,6 @@ function NavGroup({ item, collapsed, pathname, hasPermission, closeMobile }) {
         to={item.path}
         className={({ isActive }) => `nav-group__label ${isActive ? 'active' : ''}`}
         onClick={closeMobile}
-        title={collapsed ? item.title : undefined}
       >
         <span className="nav-group__icon">
           <Icon size={18} />
@@ -46,7 +43,7 @@ function NavGroup({ item, collapsed, pathname, hasPermission, closeMobile }) {
   }
 
   const Icon = item.icon;
-  const open = collapsed ? false : Boolean(expandedGroups[item.title]);
+  const open = Boolean(expandedGroups[item.title]);
   const active = isGroupActive(item, pathname);
 
   return (
@@ -55,7 +52,6 @@ function NavGroup({ item, collapsed, pathname, hasPermission, closeMobile }) {
         type="button"
         className={`nav-group__label ${active && !open ? 'active' : ''}`}
         onClick={() => dispatch(toggleGroupExpanded(item.title))}
-        title={collapsed ? item.title : undefined}
       >
         <span className="nav-group__icon">
           <Icon size={18} />
@@ -85,9 +81,13 @@ function NavGroup({ item, collapsed, pathname, hasPermission, closeMobile }) {
   );
 }
 
+/**
+ * Mobile-only navigation drawer. On tablet/desktop the same `navigation` config renders as
+ * the horizontal TopNav inside Header; below the breakpoint it collapses into this off-canvas
+ * drawer so every route stays reachable without a permanent sidebar.
+ */
 export default function Sidebar() {
   const dispatch = useDispatch();
-  const collapsed = useSelector(selectSidebarCollapsed);
   const mobileOpen = useSelector(selectSidebarMobileOpen);
   const hasPermission = usePermissionChecker();
   const { pathname } = useLocation();
@@ -97,31 +97,25 @@ export default function Sidebar() {
   return (
     <>
       {mobileOpen && <div className="sidebar-overlay" onClick={closeMobile} />}
-      <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${mobileOpen ? 'mobile-open' : ''}`}>
+      <aside className={`sidebar ${mobileOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar__brand">
           <div className="app-header__brand-mark">JK</div>
           <span className="sidebar__brand-text">JK Tracks</span>
+          <button type="button" className="sidebar__close" onClick={closeMobile} aria-label="Close menu">
+            <X size={18} />
+          </button>
         </div>
         <nav className="sidebar__nav">
           {navigation.map((item) => (
             <NavGroup
               key={item.title}
               item={item}
-              collapsed={collapsed}
               pathname={pathname}
               hasPermission={hasPermission}
               closeMobile={closeMobile}
             />
           ))}
         </nav>
-        <button
-          type="button"
-          className="sidebar__collapse-toggle"
-          onClick={() => dispatch(toggleSidebarCollapsed())}
-        >
-          {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-          {!collapsed && <span>Collapse</span>}
-        </button>
       </aside>
     </>
   );

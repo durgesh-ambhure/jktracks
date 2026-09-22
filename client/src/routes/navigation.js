@@ -6,6 +6,8 @@ import {
   Radar,
   Route as RouteIcon,
   Terminal,
+  Database,
+  IndianRupee,
   Users,
   IdCard,
   Truck,
@@ -78,6 +80,14 @@ const navigation = [
       { title: 'Track Shipment', icon: Radar, path: '/tracking', permission: 'tracking.read' },
       { title: 'Shipment Movement', icon: Truck, path: '/shipment-movement', permission: 'shipments.update' },
       { title: 'API Request/Response', icon: Terminal, path: '/api-request-response', permission: 'shipments.read' },
+    ],
+  },
+  {
+    title: 'Manifest',
+    icon: Database,
+    children: [
+      { title: 'New Transfer Manifest', icon: PackagePlus, path: '/manifests/create', permission: 'manifests.create' },
+      { title: 'All Transfer Manifests', icon: ListOrdered, path: '/manifests', permission: 'manifests.read' },
     ],
   },
   {
@@ -183,6 +193,12 @@ const navigation = [
     icon: BadgeCheck,
     path: '/kyc',
     permission: 'kyc.read',
+  },
+  {
+    title: 'Rate Cals',
+    icon: IndianRupee,
+    path: '/rate-calculator',
+    permission: 'ratecal.read',
   },
   {
     title: 'Accounting',

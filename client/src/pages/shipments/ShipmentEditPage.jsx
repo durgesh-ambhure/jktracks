@@ -12,6 +12,7 @@ function toFormValues(shipment) {
     ...shipment,
     clientId: shipment.clientId?._id || shipment.clientId || '',
     bookingDate: toInputDate(shipment.bookingDate),
+    invoiceDate: shipment.invoiceDate ? toInputDate(shipment.invoiceDate) : '',
     forwarding: { ...shipment.forwarding, vendorId: shipment.forwarding?.vendorId?._id || shipment.forwarding?.vendorId || '' },
   };
 }

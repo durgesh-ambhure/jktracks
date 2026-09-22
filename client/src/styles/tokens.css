@@ -49,6 +49,10 @@
   --color-text-muted: var(--color-gray-500);
   --color-text-inverse: #ffffff;
 
+  /* Header (top-nav admin-panel look: dark navy bar + slightly lighter sub-bar) */
+  --color-header-bg: #0b0e14;
+  --color-subheader-bg: var(--color-primary-800);
+
   /* Typography */
   --font-family-base: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
   --font-size-xs: 0.75rem;
@@ -89,8 +93,7 @@
 
   /* Layout */
   --sidebar-width: 264px;
-  --sidebar-width-collapsed: 72px;
-  --header-height: 60px;
+  --header-height: 56px;
   --z-header: 100;
   --z-sidebar: 90;
   --z-modal: 1000;

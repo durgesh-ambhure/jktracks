@@ -16,6 +16,7 @@ export function createGenericService(basePath) {
 }
 
 export const mastersService = (key) => createGenericService(`/masters/${key}`);
+export const manifestsService = createGenericService('/manifests');
 export const invoicesService = createGenericService('/invoices');
 export const paymentsService = createGenericService('/payments');
 export const kycService = createGenericService('/kyc');

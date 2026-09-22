@@ -2,6 +2,16 @@ const mongoose = require('mongoose');
 const Shipment = require('../models/Shipment');
 
 const NON_PENDING_STATUSES = ['DELIVERED', 'CANCELLED', 'RTO'];
+// Statuses that represent a docket actively moving in the network (not yet delivered,
+// not returned, not cancelled). Used for the dashboard's "In-Transit" tile.
+const IN_TRANSIT_STATUSES = [
+  'PICKED UP',
+  'INTRANSIT',
+  'ARRIVED',
+  'PACKET AT HUB',
+  'HANDOVER TO CARRIER',
+  'OUT FOR DELIVERY'
+];
 
 async function getSummary() {
   const [
@@ -9,6 +19,8 @@ async function getSummary() {
     delivered,
     pending,
     rto,
+    cancelled,
+    inTransit,
     revenueAgg,
     outstandingAgg,
     codAgg,
@@ -20,6 +32,8 @@ async function getSummary() {
     Shipment.countDocuments({ status: 'DELIVERED' }),
     Shipment.countDocuments({ status: { $nin: NON_PENDING_STATUSES } }),
     Shipment.countDocuments({ status: 'RTO' }),
+    Shipment.countDocuments({ status: 'CANCELLED' }),
+    Shipment.countDocuments({ status: { $in: IN_TRANSIT_STATUSES } }),
     Shipment.aggregate([
       { $group: { _id: null, total: { $sum: '$clientCharges.total' } } }
     ]),
@@ -54,6 +68,8 @@ async function getSummary() {
     delivered,
     pending,
     rto,
+    cancelled,
+    inTransit,
     revenue: round2(revenueAgg[0]?.total || 0),
     outstanding: round2(outstandingAgg[0]?.total || 0),
     codAmount: round2(codAgg[0]?.total || 0),

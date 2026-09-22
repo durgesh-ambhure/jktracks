@@ -31,7 +31,7 @@ export default function ShipmentCreatePage() {
       {error && <div className="alert alert-danger" style={{ marginBottom: 'var(--space-4)' }}>{error}</div>}
       <div className="card">
         <div className="card__body">
-          <ShipmentForm onSubmit={handleSubmit} submitting={submitting} submitLabel="Book Shipment" onCancel={() => navigate('/shipments')} />
+          <ShipmentForm onSubmit={handleSubmit} submitting={submitting} submitLabel="Create AWB" onCancel={() => navigate('/shipments')} />
         </div>
       </div>
     </div>

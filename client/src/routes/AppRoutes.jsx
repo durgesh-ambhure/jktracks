@@ -34,6 +34,9 @@ import CourierServiceConfigPage from '../pages/couriers/CourierServiceConfigPage
 
 import MasterGenericPage from '../pages/masters/MasterGenericPage';
 
+import TransferManifestListPage from '../pages/manifests/TransferManifestListPage';
+import TransferManifestCreatePage from '../pages/manifests/TransferManifestCreatePage';
+
 import InvoiceListPage from '../pages/invoices/InvoiceListPage';
 import InvoiceCreatePage from '../pages/invoices/InvoiceCreatePage';
 import InvoiceDetailPage from '../pages/invoices/InvoiceDetailPage';
@@ -64,6 +67,8 @@ import ClientOutstandingPage from '../pages/reports/ClientOutstandingPage';
 import ImportGenericPage from '../pages/import/ImportGenericPage';
 
 import KycPage from '../pages/kyc/KycPage';
+
+import RateCalculatorPage from '../pages/ratecal/RateCalculatorPage';
 
 import AccountEntryPage from '../pages/accounting/AccountEntryPage';
 import JournalEntryPage from '../pages/accounting/JournalEntryPage';
@@ -141,6 +146,10 @@ export default function AppRoutes() {
         <Route path="/couriers/:id/edit" element={<Protected permission="couriers.update"><CourierEditPage /></Protected>} />
         <Route path="/couriers/:id" element={<Protected permission="couriers.read"><CourierDetailPage /></Protected>} />
 
+        {/* Manifest */}
+        <Route path="/manifests" element={<Protected permission="manifests.read"><TransferManifestListPage /></Protected>} />
+        <Route path="/manifests/create" element={<Protected permission="manifests.create"><TransferManifestCreatePage /></Protected>} />
+
         {/* Masters — one generic page mounted per key */}
         {MASTER_DEFINITIONS.map((m) => (
           <Route
@@ -199,6 +208,9 @@ export default function AppRoutes() {
 
         {/* KYC */}
         <Route path="/kyc" element={<Protected permission="kyc.read"><KycPage /></Protected>} />
+
+        {/* Rate Cals */}
+        <Route path="/rate-calculator" element={<Protected permission="ratecal.read"><RateCalculatorPage /></Protected>} />
 
         {/* Accounting */}
         <Route path="/accounting/entry" element={<Protected permission="accounting.update"><AccountEntryPage /></Protected>} />

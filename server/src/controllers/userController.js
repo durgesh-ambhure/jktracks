@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const Role = require('../models/Role');
 const ApiError = require('../utils/ApiError');
 const asyncHandler = require('../utils/asyncHandler');
 const { sendSuccess, sendList, buildPagination } = require('../utils/apiResponse');
@@ -9,6 +10,13 @@ const { logAction } = require('../services/auditService');
 async function generateUserCode() {
   const count = await User.countDocuments({});
   return String(1000 + count + 1);
+}
+
+// role is no longer a Mongoose enum (see User.js / Role.js — User Group feature), so
+// existence has to be checked here instead of at the schema level.
+async function assertRoleExists(roleName) {
+  const exists = await Role.exists({ name: String(roleName).trim().toUpperCase() });
+  if (!exists) throw ApiError.badRequest(`Role "${roleName}" does not exist`);
 }
 
 // Exposes `permissionOverrides` as `permissions` too, so the User Rights
@@ -40,6 +48,7 @@ const getUser = asyncHandler(async (req, res) => {
 
 const createUser = asyncHandler(async (req, res) => {
   const { password, ...rest } = req.body;
+  await assertRoleExists(rest.role);
   const passwordHash = await bcrypt.hash(password, 10);
   const userCode = rest.userCode || (await generateUserCode());
 
@@ -63,6 +72,7 @@ const updateUser = asyncHandler(async (req, res) => {
   // silently drops any key on Object.assign(...).save() that isn't a real
   // schema path, so a raw `permissions` field would otherwise no-op.
   const { password, permissions, ...rest } = req.body;
+  if (rest.role) await assertRoleExists(rest.role);
   const user = await User.findById(req.params.id);
   if (!user) throw ApiError.notFound('User not found');
 

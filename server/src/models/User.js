@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { ROLE_NAMES } = require('./Role');
 
 const userSchema = new mongoose.Schema(
   {
@@ -7,7 +6,9 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     passwordHash: { type: String, required: true, select: false },
-    role: { type: String, required: true, enum: ROLE_NAMES },
+    // Not a Mongoose enum — role names are no longer a fixed set (see User Group / Role.js).
+    // Existence is checked against the Role collection in userController.js instead.
+    role: { type: String, required: true, trim: true, uppercase: true },
     companyCode: { type: String, default: 'CM2813' },
     isActive: { type: Boolean, default: true },
     lastLoginAt: { type: Date, default: null },

@@ -18,7 +18,7 @@ export default function App() {
         if (accessToken) {
           dispatch(setAccessToken(accessToken));
           const meRes = await authService.me();
-          dispatch(loginSuccess({ user: meRes.data, accessToken }));
+          dispatch(loginSuccess({ user: meRes.data.user, accessToken }));
         }
       } catch {
         dispatch(logout());

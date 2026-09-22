@@ -70,7 +70,7 @@ async function seedRoles() {
   for (const [name, permissions] of Object.entries(ROLE_PERMISSIONS)) {
     const role = await Role.findOneAndUpdate(
       { name },
-      { name, permissions },
+      { name, permissions, isSystem: true },
       { upsert: true, new: true, setDefaultsOnInsert: true }
     );
     results.push(role);

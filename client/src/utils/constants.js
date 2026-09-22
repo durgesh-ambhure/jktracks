@@ -28,14 +28,35 @@ export const STATUS_BADGE_MAP = {
   CANCELLED: 'gray',
   ACTIVE: 'green',
   INACTIVE: 'gray',
+  NOT_FORWARDED: 'gray',
+  FORWARDING: 'amber',
+  FORWARDED: 'green',
+  FORWARDING_FAILED: 'red',
+  GENERATED: 'green',
+  VOIDED: 'red',
+  REISSUED: 'blue',
+  NOT_GENERATED: 'gray',
+  FAILED: 'red',
 };
 
 export const BUSINESS_TYPE_OPTIONS = ['B2B', 'B2C', 'C2C'];
 export const PACKET_TYPE_OPTIONS = ['DOX', 'SPX'];
 export const PAYMENT_TYPE_OPTIONS = ['CASH', 'COD', 'CREDIT', 'WALLET'];
 export const WEIGHT_UNIT_OPTIONS = ['KGS', 'LBS'];
-export const INCOTERMS_OPTIONS = ['DDP', 'DDU'];
+export const INCOTERMS_OPTIONS = ['EXW', 'FCA', 'FAS', 'FOB', 'CFR', 'CIF', 'CPT', 'CIP', 'DAP', 'DPU', 'DDP', 'DDU'];
 export const BILL_TO_OPTIONS = ['SENDER', 'RECIPIENT'];
+
+export const KYC_TYPE_OPTIONS = ['PAN', 'AADHAAR', 'GSTIN', 'PASSPORT', 'VOTER ID', 'DRIVING LICENSE', 'IEC', 'OTHER'];
+export const UNIT_TYPE_OPTIONS = ['Pc', 'Box', 'Kg', 'Set', 'Nos', 'Pair'];
+export const INVOICE_TYPE_OPTIONS = ['INVOICE', 'PROFORMA INVOICE', 'COMMERCIAL INVOICE', 'CUSTOM DECLARATION'];
+
+// Selecting a note type prefills the (editable) invoice note text with a standard phrase.
+export const INVOICE_NOTE_OPTIONS = [
+  { value: 'SAMPLE', label: 'Sample', text: 'FREE TRADE SAMPLES OF NO COMMERCIAL VALUE' },
+  { value: 'GIFT', label: 'Gift', text: 'GIFT - NO COMMERCIAL VALUE' },
+  { value: 'SALE', label: 'Sale of Goods', text: 'COMMERCIAL SHIPMENT - SOLD AS PER INVOICE' },
+  { value: 'RETURN', label: 'Return / Repair', text: 'GOODS RETURNED FOR REPAIR - NO COMMERCIAL VALUE' },
+];
 
 export const REASON_CODE_OPTIONS = [
   { code: 'CONSIGNEE_NA', label: 'Consignee not available' },
@@ -61,6 +82,8 @@ export const PERMISSION_MODULES = [
   'reports',
   'import',
   'kyc',
+  'manifests',
+  'ratecal',
   'accounting',
   'users',
   'settings',

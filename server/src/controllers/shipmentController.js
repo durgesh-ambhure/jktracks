@@ -8,6 +8,7 @@ const { buildListQuery } = require('../utils/queryHelper');
 const { logAction } = require('../services/auditService');
 const { computeShipmentCharges } = require('../services/shipmentChargeService');
 const { generateAwbNo } = require('../services/awbService');
+const { forwardShipmentToVendor } = require('../services/shipmentForwarding.service');
 const { toCsv } = require('../utils/csv');
 
 const listShipments = asyncHandler(async (req, res) => {
@@ -159,6 +160,42 @@ const cancelShipment = asyncHandler(async (req, res) => {
   sendSuccess(res, { message: 'Shipment cancelled', data: shipment });
 });
 
+const forwardShipment = asyncHandler(async (req, res) => {
+  const { courierCode } = req.body;
+
+  const { shipment, success, message } = await forwardShipmentToVendor(req.params.id, { courierCode, userId: req.user.id });
+
+  await logAction(req, {
+    action: success ? 'SHIPMENT_FORWARDED' : 'SHIPMENT_FORWARD_FAILED',
+    entity: 'Shipment',
+    entityId: shipment._id,
+    formName: 'Shipments',
+    actionDescription: success
+      ? `Forwarded shipment ${shipment.awbNo} to ${shipment.courierForwarding?.vendorName || shipment.courierForwarding?.vendorCode}`
+      : `Failed to forward shipment ${shipment.awbNo}: ${message}`,
+    refNo: shipment.awbNo
+  });
+
+  // A failed vendor booking is a real business outcome (not a server error) that the DB now
+  // reflects via courierForwarding.status/lastError, so it's returned as a normal (200)
+  // response with success:false rather than thrown as an ApiError — the frontend distinguishes
+  // "request succeeded, vendor said no" from "request itself failed" this way.
+  sendSuccess(res, {
+    message,
+    data: {
+      success,
+      shipmentId: shipment._id,
+      courier: shipment.courierForwarding?.vendorCode,
+      status: shipment.courierForwarding?.status,
+      awbNumber: shipment.courierForwarding?.vendorAwbNumber,
+      trackingNumber: shipment.courierForwarding?.trackingNumber,
+      vendorShipmentId: shipment.courierForwarding?.vendorShipmentId,
+      labelUrl: shipment.courierForwarding?.labelUrl,
+      lastError: shipment.courierForwarding?.lastError
+    }
+  });
+});
+
 const EXPORT_COLUMNS = [
   { label: 'AWB No', value: 'awbNo' },
   { label: 'Ref No', value: 'refNo' },
@@ -202,5 +239,6 @@ module.exports = {
   updateShipment,
   deleteShipment,
   cancelShipment,
+  forwardShipment,
   exportShipments
 };

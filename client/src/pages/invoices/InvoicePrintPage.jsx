@@ -4,7 +4,7 @@ import { Printer } from 'lucide-react';
 import PageHeader from '../../components/common/PageHeader';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
 import ErrorState from '../../components/common/ErrorState';
-import { invoicesService } from '../../services/generic.service';
+import invoiceService from '../../services/invoice.service';
 import { formatCurrency, formatDate } from '../../utils/formatters';
 
 export default function InvoicePrintPage() {
@@ -14,7 +14,7 @@ export default function InvoicePrintPage() {
   const load = useCallback(async () => {
     setState({ loading: true, error: '', data: null });
     try {
-      const res = await invoicesService.get(id);
+      const res = await invoiceService.get(id);
       setState({ loading: false, error: '', data: res.data });
     } catch (err) {
       setState({ loading: false, error: err.message, data: null });
@@ -42,8 +42,30 @@ export default function InvoicePrintPage() {
             <h2>{inv.invoiceNo || `Invoice ${id}`}</h2>
             <p>{formatDate(inv.invoiceDate || inv.createdAt)}</p>
           </div>
-          <p><strong>Bill To:</strong> {inv.clientName || inv.client || '-'}</p>
-          <p><strong>Amount:</strong> {formatCurrency(inv.amount)}</p>
+          <p><strong>Bill To:</strong> {inv.clientId?.name || '-'}</p>
+          <p><strong>Type:</strong> {inv.invoiceType || 'STANDARD'}</p>
+          <p><strong>Period:</strong> {formatDate(inv.fromDate)} – {formatDate(inv.toDate)}</p>
+
+          <table className="data-table" style={{ marginTop: 'var(--space-4)' }}>
+            <thead>
+              <tr><th>AWB No</th><th style={{ textAlign: 'right' }}>Amount</th></tr>
+            </thead>
+            <tbody>
+              {(inv.lineItems || []).map((li) => (
+                <tr key={li.awbNo}><td>{li.awbNo}</td><td style={{ textAlign: 'right' }}>{formatCurrency(li.amount)}</td></tr>
+              ))}
+            </tbody>
+          </table>
+
+          {inv.taxBreakup?.length > 0 && (
+            <div style={{ marginTop: 'var(--space-4)' }}>
+              {inv.taxBreakup.map((t) => (
+                <p key={t.taxType}><strong>{t.taxType} ({t.percentage}%):</strong> {formatCurrency(t.amount)}</p>
+              ))}
+            </div>
+          )}
+
+          <p style={{ marginTop: 'var(--space-4)' }}><strong>Total Amount:</strong> {formatCurrency(inv.amount)}</p>
         </div>
       </div>
     </div>

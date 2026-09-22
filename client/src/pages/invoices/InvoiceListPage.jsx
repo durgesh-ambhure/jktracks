@@ -6,7 +6,7 @@ import SearchInput from '../../components/common/SearchInput';
 import DataTable from '../../components/common/DataTable';
 import Pagination from '../../components/common/Pagination';
 import StatusBadge from '../../components/common/StatusBadge';
-import { invoicesService } from '../../services/generic.service';
+import invoiceService from '../../services/invoice.service';
 import { useDebounce } from '../../hooks/useDebounce';
 import { usePagination } from '../../hooks/usePagination';
 import { usePermission } from '../../hooks/usePermission';
@@ -23,7 +23,7 @@ export default function InvoiceListPage() {
   const load = useCallback(async () => {
     setState((s) => ({ ...s, loading: true, error: '' }));
     try {
-      const res = await invoicesService.list({ search: debouncedSearch, page, limit });
+      const res = await invoiceService.list({ search: debouncedSearch, page, limit });
       setState({ loading: false, error: '', rows: res.data || [], pagination: res.pagination });
     } catch (err) {
       setState({ loading: false, error: err.message, rows: [], pagination: null });
@@ -47,10 +47,11 @@ export default function InvoiceListPage() {
       <DataTable
         columns={[
           { key: 'invoiceNo', header: 'Invoice No', render: (r) => <a href={`/invoices/${r._id}`} onClick={(e) => { e.preventDefault(); navigate(`/invoices/${r._id}`); }}>{r.invoiceNo || r._id}</a> },
-          { key: 'client', header: 'Client', render: (r) => r.clientName || r.client || '-' },
+          { key: 'invoiceType', header: 'Type', render: (r) => r.invoiceType || 'STANDARD' },
+          { key: 'client', header: 'Client', render: (r) => r.clientId?.name || '-' },
           { key: 'invoiceDate', header: 'Date', render: (r) => formatDate(r.invoiceDate || r.createdAt) },
           { key: 'amount', header: 'Amount', align: 'right', render: (r) => formatCurrency(r.amount) },
-          { key: 'status', header: 'Status', render: (r) => <StatusBadge status={r.status || 'BOOKED'} /> },
+          { key: 'status', header: 'Status', render: (r) => <StatusBadge status={r.status || 'GENERATED'} /> },
           { key: 'actions', header: '', align: 'right', render: (r) => <button type="button" className="btn btn-ghost btn-sm btn-icon-only" onClick={() => navigate(`/invoices/${r._id}`)}><Eye size={15} /></button> },
         ]}
         rows={state.rows}

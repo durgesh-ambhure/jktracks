@@ -4,6 +4,7 @@ const shipmentEventController = require('../controllers/shipmentEventController'
 const { authenticate, requirePermission } = require('../middleware/auth');
 const validate = require('../middleware/validate');
 const shipmentValidators = require('../validators/shipmentValidators');
+const shipmentForwardValidators = require('../validators/shipmentForwardValidators');
 const shipmentEventValidators = require('../validators/shipmentEventValidators');
 
 const router = express.Router();
@@ -20,6 +21,7 @@ router.get('/:id', requirePermission('shipments.read'), shipmentController.getSh
 router.patch('/:id', requirePermission('shipments.update'), validate(shipmentValidators.updateShipment), shipmentController.updateShipment);
 router.delete('/:id', requirePermission('shipments.delete'), shipmentController.deleteShipment);
 router.post('/:id/cancel', requirePermission('shipments.update'), validate(shipmentValidators.cancelShipment), shipmentController.cancelShipment);
+router.post('/:id/forward', requirePermission('shipments.update'), validate(shipmentForwardValidators.forwardShipment), shipmentController.forwardShipment);
 
 router.get('/:id/events', requirePermission('shipments.read'), shipmentEventController.listEvents);
 router.post('/:id/events', requirePermission('shipments.update'), validate(shipmentEventValidators.createEvent), shipmentEventController.createEvent);

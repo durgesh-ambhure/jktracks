@@ -7,6 +7,7 @@ import ErrorState from '../../components/common/ErrorState';
 import StatusBadge from '../../components/common/StatusBadge';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import AddressCard from '../../components/shipment/AddressCard';
+import ForwardShipmentButton from '../../components/shipment/ForwardShipmentButton';
 import EventTimeline from '../../components/tracking/EventTimeline';
 import shipmentService from '../../services/shipment.service';
 import { usePermission } from '../../hooks/usePermission';
@@ -98,6 +99,33 @@ export default function ShipmentDetailPage() {
           <div><p className="text-xs text-muted">Invoice No</p><p className="fw-medium">{s.invoiceNo || '-'}</p></div>
         </div>
       </div>
+
+      {s.status !== 'CANCELLED' && (
+        <div className="card" style={{ marginBottom: 'var(--space-5)' }}>
+          <div className="card__header">
+            <h3 className="card__title">Courier Forwarding</h3>
+            <StatusBadge status={s.courierForwarding?.status || 'NOT_FORWARDED'} />
+          </div>
+          <div className="card__body">
+            {canUpdate ? (
+              <ForwardShipmentButton shipment={s} onForwarded={load} />
+            ) : (
+              <p className="text-sm text-muted">You don&apos;t have permission to forward this shipment.</p>
+            )}
+            {s.courierForwarding?.status === 'FORWARDED' && (
+              <div className="grid-4 text-sm" style={{ marginTop: 'var(--space-3)' }}>
+                <div><span className="text-muted">Courier: </span>{s.courierForwarding.vendorName || s.courierForwarding.vendorCode}</div>
+                <div><span className="text-muted">Vendor AWB: </span>{s.courierForwarding.vendorAwbNumber || '-'}</div>
+                <div><span className="text-muted">Tracking No: </span>{s.courierForwarding.trackingNumber || '-'}</div>
+                <div><span className="text-muted">Forwarded At: </span>{formatDate(s.courierForwarding.forwardedAt)}</div>
+              </div>
+            )}
+            {s.courierForwarding?.status === 'FORWARDING_FAILED' && s.courierForwarding?.lastError && (
+              <p className="text-sm" style={{ marginTop: 'var(--space-3)' }}><span className="text-muted">Last error: </span>{s.courierForwarding.lastError}</p>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="grid-2" style={{ marginBottom: 'var(--space-5)' }}>
         <AddressCard title="Consignor" address={s.consignor} />

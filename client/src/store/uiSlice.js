@@ -18,7 +18,7 @@ function writeLocal(key, value) {
 }
 
 const initialState = {
-  sidebarCollapsed: readLocal('jkt_sidebar_collapsed', false),
+  // Mobile-only nav drawer (top-nav collapses into this below the tablet breakpoint).
   sidebarMobileOpen: false,
   expandedGroups: readLocal('jkt_sidebar_expanded', {}),
   pageSize: readLocal('jkt_page_size', 20),
@@ -29,10 +29,6 @@ const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    toggleSidebarCollapsed(state) {
-      state.sidebarCollapsed = !state.sidebarCollapsed;
-      writeLocal('jkt_sidebar_collapsed', state.sidebarCollapsed);
-    },
     setSidebarMobileOpen(state, action) {
       state.sidebarMobileOpen = action.payload;
     },
@@ -53,14 +49,12 @@ const uiSlice = createSlice({
 });
 
 export const {
-  toggleSidebarCollapsed,
   setSidebarMobileOpen,
   toggleGroupExpanded,
   setPageSize,
   setTheme,
 } = uiSlice.actions;
 
-export const selectSidebarCollapsed = (state) => state.ui.sidebarCollapsed;
 export const selectSidebarMobileOpen = (state) => state.ui.sidebarMobileOpen;
 export const selectExpandedGroups = (state) => state.ui.expandedGroups;
 export const selectPageSize = (state) => state.ui.pageSize;

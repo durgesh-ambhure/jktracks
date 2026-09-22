@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Joi from 'joi';
 import { Save, X } from 'lucide-react';
 import FormInput from '../common/FormInput';
 import FormSelect from '../common/FormSelect';
-import { ROLE_OPTIONS } from '../../utils/constants';
+import userService from '../../services/user.service';
 
 function buildSchema(isEdit) {
   return Joi.object({
@@ -14,7 +15,7 @@ function buildSchema(isEdit) {
     password: isEdit
       ? Joi.string().allow('').min(6).messages({ 'string.min': 'Password must be at least 6 characters' })
       : Joi.string().min(6).required().messages({ 'string.empty': 'Password is required', 'string.min': 'Password must be at least 6 characters' }),
-    role: Joi.string().valid(...ROLE_OPTIONS).required().messages({ 'any.only': 'Select a role', 'string.empty': 'Select a role' }),
+    role: Joi.string().required().messages({ 'string.empty': 'Select a role' }),
     companyCode: Joi.string().allow(''),
     isActive: Joi.boolean().default(true),
   });
@@ -23,6 +24,14 @@ function buildSchema(isEdit) {
 const defaults = { userCode: '', name: '', email: '', password: '', role: 'STAFF', companyCode: '', isActive: true };
 
 export default function UserForm({ defaultValues, onSubmit, submitting, submitLabel = 'Save User', onCancel, isEdit = false }) {
+  const [roleOptions, setRoleOptions] = useState([]);
+
+  useEffect(() => {
+    // Roles are no longer a fixed 5-value set — Group Rights/User Group can add custom
+    // groups, so this list is fetched from the Role collection instead of a static constant.
+    userService.roles().then((res) => setRoleOptions((res.data || []).map((r) => r.name))).catch(() => setRoleOptions([]));
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -45,7 +54,7 @@ export default function UserForm({ defaultValues, onSubmit, submitting, submitLa
           error={errors.password?.message}
           {...register('password')}
         />
-        <FormSelect label="Role" required options={ROLE_OPTIONS} error={errors.role?.message} {...register('role')} />
+        <FormSelect label="Role" required options={roleOptions} error={errors.role?.message} {...register('role')} />
         <FormInput label="Company Code" error={errors.companyCode?.message} {...register('companyCode')} />
       </div>
       <label className="checkbox-row" style={{ marginBottom: 'var(--space-4)' }}>

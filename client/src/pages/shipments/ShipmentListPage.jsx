@@ -108,6 +108,7 @@ export default function ShipmentListPage() {
     { key: 'paymentType', header: 'Payment' },
     { key: 'packetType', header: 'Packet' },
     { key: 'status', header: 'Status', render: (r) => <StatusBadge status={r.status} /> },
+    { key: 'forwardingStatus', header: 'Forwarding', render: (r) => <StatusBadge status={r.courierForwarding?.status || 'NOT_FORWARDED'} /> },
     { key: 'amount', header: 'Amount', align: 'right', render: (r) => formatCurrency(r.amount, r.currency) },
     {
       key: 'actions',

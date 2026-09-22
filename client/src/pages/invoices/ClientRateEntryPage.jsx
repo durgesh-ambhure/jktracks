@@ -1,5 +1,5 @@
-import SkeletonPage from '../common/SkeletonPage';
+import RateCardManagerPage from './RateCardManagerPage';
 
 export default function ClientRateEntryPage() {
-  return <SkeletonPage title="Client Rate Entry" breadcrumb={[{ label: 'Invoices', to: '/invoices' }, { label: 'Client Rate Entry' }]} note="Rate-per-zone/weight-break entry — Tier-2 placeholder pending the rate-card data model." />;
+  return <RateCardManagerPage partyType="CLIENT" title="Client Rate Entry" />;
 }

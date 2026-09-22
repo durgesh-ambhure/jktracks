@@ -15,10 +15,13 @@ export default function DataTable({
   emptyDescription = 'Try adjusting your filters or search terms.',
   keyField = '_id',
   onRowClick,
+  className = '',
 }) {
+  const wrapClassName = `data-table-wrap${className ? ` ${className}` : ''}`;
+
   if (loading) {
     return (
-      <div className="data-table-wrap">
+      <div className={wrapClassName}>
         <LoadingSpinner label="Loading records…" />
       </div>
     );
@@ -26,7 +29,7 @@ export default function DataTable({
 
   if (error) {
     return (
-      <div className="data-table-wrap">
+      <div className={wrapClassName}>
         <ErrorState message={error} onRetry={onRetry} />
       </div>
     );
@@ -34,14 +37,14 @@ export default function DataTable({
 
   if (!rows || rows.length === 0) {
     return (
-      <div className="data-table-wrap">
+      <div className={wrapClassName}>
         <EmptyState title={emptyTitle} description={emptyDescription} />
       </div>
     );
   }
 
   return (
-    <div className="data-table-wrap">
+    <div className={wrapClassName}>
       <div className="table-scroll">
         <table className="data-table">
           <thead>

@@ -7,6 +7,7 @@ const shipmentService = {
   update: (id, payload) => unwrap(api.patch(`/shipments/${id}`, payload)),
   remove: (id) => unwrap(api.delete(`/shipments/${id}`)),
   cancel: (id, reason) => unwrap(api.post(`/shipments/${id}/cancel`, { reason })),
+  forward: (id, courierCode) => unwrap(api.post(`/shipments/${id}/forward`, courierCode ? { courierCode } : {})),
   exportCsv: (params) => api.get('/shipments/export', { params, responseType: 'blob' }),
   listEvents: (id) => unwrap(api.get(`/shipments/${id}/events`)),
   addEvent: (id, payload) => unwrap(api.post(`/shipments/${id}/events`, payload)),
